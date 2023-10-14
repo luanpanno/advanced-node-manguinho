@@ -9,12 +9,12 @@
     "module": "commonjs",
     "moduleResolution": "node",
     "esModuleInterop": true,
-    "baseUrl": ".",
+    "baseUrl": "src",
     "paths": {
-      "@/*": ["src/*"],
-      "@/tests/*": ["tests/*"]
+      "@/*": ["*"],
+      "@/tests/*": ["../tests/*"]
     },
     "strict": true
   },
-  "include": ["src"]
+  "include": ["src", "tests"]
 }

@@ -3,11 +3,6 @@
   "version": "1.0.0",
   "description": "[NodeJs Avançado com TDD, Clean Architecture e Typescript](https://www.udemy.com/course/nodejs-avancado/) - Udemy Online Course by Rodrigo Manguinho",
   "main": "index.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "rimraf dist && tsc",
-    "start": "node dist/main/api"
-  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/luanpanno/advanced-node-manguinho.git"
@@ -19,17 +14,27 @@
     "url": "https://github.com/luanpanno/advanced-node-manguinho/issues"
   },
   "homepage": "https://github.com/luanpanno/advanced-node-manguinho#readme",
-  "devDependencies": {
-    "@types/module-alias": "^2.0.2",
-    "@types/node": "^20.8.6",
-    "prettier": "^3.0.3",
-    "typescript": "^5.2.2"
-  },
   "engines": {
     "node": "18.x"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "rimraf dist && tsc -p tsconfig-build.json",
+    "start": "node dist/main/api",
+    "lint": "eslint .",
+    "lint:fix": "npm run lint -- --fix"
   },
   "dependencies": {
     "module-alias": "^2.2.3",
     "rimraf": "^5.0.5"
+  },
+  "devDependencies": {
+    "@types/module-alias": "^2.0.2",
+    "@types/node": "^20.8.6",
+    "eslint-config-prettier": "^9.0.0",
+    "eslint-config-standard-with-typescript": "^39.1.1",
+    "eslint-plugin-prettier": "^5.0.1",
+    "prettier": "^3.0.3",
+    "typescript": "^5.2.2"
   }
 }
