@@ -1,5 +1,5 @@
-import { AccessToken } from '@/domain/models';
 import { AuthenticationError } from '@/domain/errors';
+import { AccessToken } from '@/domain/models';
 
 export interface FacebookAuthentication {
   perform: (

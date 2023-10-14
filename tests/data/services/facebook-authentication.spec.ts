@@ -1,5 +1,6 @@
 import { LoadFacebookUserApi } from '@/data/contracts/apis';
 import { FacebookAuthenticationService } from '@/data/services';
+
 import { AuthenticationError } from '@/domain/errors';
 
 class LoadFacebookUserApiSpy implements LoadFacebookUserApi {

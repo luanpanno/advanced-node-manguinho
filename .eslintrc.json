@@ -20,7 +20,24 @@
     "prettier/prettier": ["error", { "endOfLine": "auto" }],
     "arrow-body-style": ["error"],
     "no-magic-numbers": "warn",
-    "@typescript-eslint/no-namespace": "off"
+    "@typescript-eslint/no-namespace": "off",
+    "import-helpers/order-imports": [
+      "error",
+      {
+        "newlinesBetween": "always",
+        "groups": [
+          "module",
+          "/^@/data/",
+          "/^@/domain/",
+          "/^@/main/",
+          ["parent", "sibling", "index"]
+        ],
+        "alphabetize": {
+          "order": "asc",
+          "ignoreCase": true
+        }
+      }
+    ]
   },
   "ignorePatterns": ["jest.config.js"]
 }
