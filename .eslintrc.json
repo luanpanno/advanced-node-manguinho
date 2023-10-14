@@ -12,7 +12,7 @@
     "prettier"
   ],
   "parserOptions": {
-    "project": "./tsconfig.json"
+    "project": "tsconfig.json"
   },
   "rules": {
     "semi": [2, "always"],
@@ -21,5 +21,6 @@
     "arrow-body-style": ["error"],
     "no-magic-numbers": "warn",
     "@typescript-eslint/no-namespace": "off"
-  }
+  },
+  "ignorePatterns": ["jest.config.js"]
 }
