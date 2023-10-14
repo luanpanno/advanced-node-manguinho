@@ -4,7 +4,9 @@
   "description": "[NodeJs Avançado com TDD, Clean Architecture e Typescript](https://www.udemy.com/course/nodejs-avancado/) - Udemy Online Course by Rodrigo Manguinho",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "rimraf dist && tsc",
+    "start": "node dist/main/api"
   },
   "repository": {
     "type": "git",
@@ -16,5 +18,17 @@
   "bugs": {
     "url": "https://github.com/luanpanno/advanced-node-manguinho/issues"
   },
-  "homepage": "https://github.com/luanpanno/advanced-node-manguinho#readme"
+  "homepage": "https://github.com/luanpanno/advanced-node-manguinho#readme",
+  "devDependencies": {
+    "@types/module-alias": "^2.0.2",
+    "@types/node": "^20.8.6",
+    "typescript": "^5.2.2"
+  },
+  "engines": {
+    "node": "18.x"
+  },
+  "dependencies": {
+    "module-alias": "^2.2.3",
+    "rimraf": "^5.0.5"
+  }
 }
