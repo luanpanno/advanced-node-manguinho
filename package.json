@@ -1,0 +1,20 @@
+{
+  "name": "advanced-node-manguinho",
+  "version": "1.0.0",
+  "description": "[NodeJs Avançado com TDD, Clean Architecture e Typescript](https://www.udemy.com/course/nodejs-avancado/) - Udemy Online Course by Rodrigo Manguinho",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/luanpanno/advanced-node-manguinho.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/luanpanno/advanced-node-manguinho/issues"
+  },
+  "homepage": "https://github.com/luanpanno/advanced-node-manguinho#readme"
+}
