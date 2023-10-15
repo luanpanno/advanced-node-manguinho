@@ -3,7 +3,7 @@ import { AccessToken } from '@/domain/models';
 
 export interface FacebookAuthentication {
   perform: (
-    params: FacebookAuthentication.Params
+    params: FacebookAuthentication.Params,
   ) => Promise<FacebookAuthentication.Result>;
 }
 
