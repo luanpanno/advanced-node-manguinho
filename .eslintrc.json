@@ -19,7 +19,6 @@
     "@typescript-eslint/semi": [2, "always"],
     "prettier/prettier": ["error", { "endOfLine": "auto" }],
     "arrow-body-style": ["error"],
-    "no-magic-numbers": "warn",
     "@typescript-eslint/no-namespace": "off",
     "import-helpers/order-imports": [
       "error",

@@ -68,16 +68,16 @@ describe('FacebookAuthenticationService', () => {
     expect(userAccountRepo.load).toHaveBeenCalledTimes(1);
   });
 
-  it('should call CreateFacebookAccountRepo when LoadUserAccountRepo returns undefined', async () => {
+  it('should create account with facebook data', async () => {
     const { sut, userAccountRepo } = makeSut();
 
     await sut.perform({ token });
 
-    expect(userAccountRepo.createFromFacebook).toHaveBeenCalledWith(fbData);
-    expect(userAccountRepo.createFromFacebook).toHaveBeenCalledTimes(1);
+    expect(userAccountRepo.saveWithFacebook).toHaveBeenCalledWith(fbData);
+    expect(userAccountRepo.saveWithFacebook).toHaveBeenCalledTimes(1);
   });
 
-  it('should call UpdateFacebookAccountRepo when LoadUserAccountRepo returns data', async () => {
+  it('should not update account name', async () => {
     const { sut, userAccountRepo } = makeSut();
 
     userAccountRepo.load.mockResolvedValueOnce({
@@ -87,12 +87,13 @@ describe('FacebookAuthenticationService', () => {
 
     await sut.perform({ token });
 
-    expect(userAccountRepo.updateWithFacebook).toHaveBeenCalledWith({
+    expect(userAccountRepo.saveWithFacebook).toHaveBeenCalledWith({
       id: 'any_id',
       name: 'any_name',
+      email: fbData.email,
       facebookId: fbData.facebookId,
     });
-    expect(userAccountRepo.updateWithFacebook).toHaveBeenCalledTimes(1);
+    expect(userAccountRepo.saveWithFacebook).toHaveBeenCalledTimes(1);
   });
 
   it('should update account name', async () => {
@@ -104,11 +105,12 @@ describe('FacebookAuthenticationService', () => {
 
     await sut.perform({ token });
 
-    expect(userAccountRepo.updateWithFacebook).toHaveBeenCalledWith({
+    expect(userAccountRepo.saveWithFacebook).toHaveBeenCalledWith({
       id: 'any_id',
       name: fbData.name,
+      email: fbData.email,
       facebookId: fbData.facebookId,
     });
-    expect(userAccountRepo.updateWithFacebook).toHaveBeenCalledTimes(1);
+    expect(userAccountRepo.saveWithFacebook).toHaveBeenCalledTimes(1);
   });
 });

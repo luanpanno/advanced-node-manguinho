@@ -18,15 +18,12 @@ export class FacebookAuthenticationService {
     if (fbData) {
       const account = await this.userAccountRepo.load({ email: fbData.email });
 
-      if (account) {
-        await this.userAccountRepo.updateWithFacebook({
-          id: account.id,
-          name: account.name ?? fbData.name,
-          facebookId: fbData.facebookId,
-        });
-      } else {
-        await this.userAccountRepo.createFromFacebook(fbData);
-      }
+      await this.userAccountRepo.saveWithFacebook({
+        id: account?.id,
+        name: account?.name ?? fbData.name,
+        email: fbData.email,
+        facebookId: fbData.facebookId,
+      });
     }
 
     return new AuthenticationError();
