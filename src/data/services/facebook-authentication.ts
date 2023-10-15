@@ -1,28 +1,24 @@
-import { LoadFacebookUserApi } from '@/data/contracts/apis';
+import { FacebookApi } from '@/data/contracts/apis';
 
 import { AuthenticationError } from '@/domain/errors';
 import { FacebookAuthentication } from '@/domain/features';
 
-import {
-  CreateFacebookAccountRepository,
-  LoadUserAccountRepository,
-} from '../contracts/repos';
+import { UserAccountRepository } from '../contracts/repos';
 
 export class FacebookAuthenticationService {
   constructor(
-    private readonly loadFacebookUserApi: LoadFacebookUserApi,
-    private readonly loadUserAccountRepo: LoadUserAccountRepository,
-    private readonly createFacebookAccountRepo: CreateFacebookAccountRepository,
+    private readonly facebookApi: FacebookApi,
+    private readonly userAccountRepo: UserAccountRepository,
   ) {}
 
   async perform(
     params: FacebookAuthentication.Params,
   ): Promise<AuthenticationError> {
-    const data = await this.loadFacebookUserApi.loadUser(params);
+    const data = await this.facebookApi.loadUser(params);
 
     if (data) {
-      await this.loadUserAccountRepo.load({ email: data.email });
-      await this.createFacebookAccountRepo.createFromFacebook(data);
+      await this.userAccountRepo.load({ email: data.email });
+      await this.userAccountRepo.createFromFacebook(data);
     }
 
     return new AuthenticationError();

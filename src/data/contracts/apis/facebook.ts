@@ -1,3 +1,5 @@
+export type FacebookApi = LoadFacebookUserApi;
+
 export interface LoadFacebookUserApi {
   loadUser: (
     params: LoadFacebookUserApi.Params,

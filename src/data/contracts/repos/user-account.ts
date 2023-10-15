@@ -1,3 +1,6 @@
+export type UserAccountRepository = LoadUserAccountRepository &
+  CreateFacebookAccountRepository;
+
 export interface LoadUserAccountRepository {
   load: (params: LoadUserAccountRepository.Params) => Promise<void>;
 }
