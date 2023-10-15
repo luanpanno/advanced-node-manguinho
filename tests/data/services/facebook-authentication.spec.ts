@@ -65,7 +65,7 @@ describe('FacebookAuthenticationService', () => {
     expect(userAccountRepo.load).toHaveBeenCalledTimes(1);
   });
 
-  it('should call CreateFacebookAccountRepository when LoadUserAccountRepo returns undefined', async () => {
+  it('should call CreateFacebookAccountRepo when LoadUserAccountRepo returns undefined', async () => {
     const { sut, userAccountRepo } = makeSut();
 
     userAccountRepo.load.mockResolvedValueOnce(undefined);
@@ -78,5 +78,23 @@ describe('FacebookAuthenticationService', () => {
       facebookId,
     });
     expect(userAccountRepo.createFromFacebook).toHaveBeenCalledTimes(1);
+  });
+
+  it('should call UpdateFacebookAccountRepo when LoadUserAccountRepo returns data', async () => {
+    const { sut, userAccountRepo } = makeSut();
+
+    userAccountRepo.load.mockResolvedValueOnce({
+      id: 'any_id',
+      name: 'any_name',
+    });
+
+    await sut.perform({ token });
+
+    expect(userAccountRepo.updateWithFacebook).toHaveBeenCalledWith({
+      facebookId,
+      id: 'any_id',
+      name: 'any_name',
+    });
+    expect(userAccountRepo.updateWithFacebook).toHaveBeenCalledTimes(1);
   });
 });
