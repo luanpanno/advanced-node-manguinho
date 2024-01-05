@@ -29,6 +29,7 @@ const makeSut = (): Sut => {
     id: 'any_account_id',
   });
   const crypto = mock<TokenGenerator>();
+  crypto.generateToken.mockResolvedValue('any_generated_token');
   const sut = new FacebookAuthenticationService(
     facebookApi,
     userAccountRepo,
@@ -109,5 +110,12 @@ describe('FacebookAuthenticationService', () => {
       expirationInMs: AccessToken.expirationInMs,
     });
     expect(crypto.generateToken).toHaveBeenCalledTimes(1);
+  });
+
+  it('should return an AccessToken on success', async () => {
+    const { sut } = makeSut();
+    const authResult = await sut.perform({ token });
+
+    expect(authResult).toEqual(new AccessToken('any_generated_token'));
   });
 });
