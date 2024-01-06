@@ -28,6 +28,7 @@
           "module",
           "/^@/data/",
           "/^@/domain/",
+          "/^@/infra/",
           "/^@/main/",
           ["parent", "sibling", "index"]
         ],
