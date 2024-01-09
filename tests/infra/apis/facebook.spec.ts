@@ -7,7 +7,9 @@ const makeSut = () => {
   const clientId = 'any_client_id';
   const clientSecret = 'any_client_secret';
   const httpClient = mock<HttpGetClient>();
-  httpClient.get.mockResolvedValueOnce({ access_token: 'any_app_token' });
+  httpClient.get
+    .mockResolvedValueOnce({ access_token: 'any_app_token' })
+    .mockResolvedValueOnce({ data: { user_id: 'any_user_id' } });
   const sut = new FacebookApi(httpClient, clientId, clientSecret);
 
   return {
@@ -44,6 +46,20 @@ describe('Facebook', () => {
       params: {
         access_token: 'any_app_token',
         input_token: 'any_client_token',
+      },
+    });
+  });
+
+  it('should get user info', async () => {
+    const { sut, httpClient } = makeSut();
+
+    await sut.loadUser({ token: 'any_client_token' });
+
+    expect(httpClient.get).toHaveBeenCalledWith({
+      url: 'https://graph.facebook.com/any_user_id',
+      params: {
+        fields: 'id,name,email',
+        access_token: 'any_client_token',
       },
     });
   });
