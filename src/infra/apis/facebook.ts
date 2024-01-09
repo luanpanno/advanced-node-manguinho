@@ -13,12 +13,20 @@ export class FacebookApi {
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   async loadUser(params: LoadFacebookUserApi.Params): Promise<void> {
-    this.httpClient.get({
+    const data = await this.httpClient.get({
       url: `${this.baseUrl}/oauth/access_token`,
       params: {
         client_id: this.clientId,
         client_secret: this.clientSecret,
         grant_type: 'client_credentials',
+      },
+    });
+
+    await this.httpClient.get({
+      url: `${this.baseUrl}/debug_token`,
+      params: {
+        access_token: data.access_token,
+        input_token: params.token,
       },
     });
   }
