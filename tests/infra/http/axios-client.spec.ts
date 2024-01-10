@@ -10,23 +10,32 @@ class AxiosHttpClient {
 
 jest.mock('axios');
 
+const makeSut = () => {
+  const fakeAxios = axios as jest.Mocked<typeof axios>;
+  const sut = new AxiosHttpClient();
+
+  return {
+    fakeAxios,
+    sut,
+  };
+};
+
 describe('AxiosHttpClient', () => {
   describe('get', () => {
     it('should call get with correct params', async () => {
-      const fakeAxios = axios as jest.Mocked<typeof axios>;
-      const sut = new AxiosHttpClient();
+      const { sut, fakeAxios } = makeSut();
+      const url = 'any_url';
+      const params = {
+        any: 'any',
+      };
 
       await sut.get({
-        url: 'any_url',
-        params: {
-          any: 'any',
-        },
+        url,
+        params,
       });
 
-      expect(fakeAxios.get).toHaveBeenCalledWith('any_url', {
-        params: {
-          any: 'any',
-        },
+      expect(fakeAxios.get).toHaveBeenCalledWith(url, {
+        params,
       });
       expect(fakeAxios.get).toHaveBeenCalledTimes(1);
     });
