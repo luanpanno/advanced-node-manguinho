@@ -30,6 +30,7 @@
           "/^@/domain/",
           "/^@/infra/",
           "/^@/main/",
+          "/^@/tests/",
           ["parent", "sibling", "index"]
         ],
         "alphabetize": {
