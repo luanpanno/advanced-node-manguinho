@@ -1,6 +1,5 @@
 export interface HttpGetClient {
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  get: <T = any>(params: HttpGetClient.Params) => Promise<T>;
+  get: <T = unknown>(params: HttpGetClient.Params) => Promise<T>;
 }
 
 export namespace HttpGetClient {

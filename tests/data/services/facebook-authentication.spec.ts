@@ -29,7 +29,7 @@ const makeSut = (): Sut => {
     id: 'any_account_id',
   });
   const crypto = mock<TokenGenerator>();
-  crypto.generateToken.mockResolvedValue('any_generated_token');
+  crypto.generateToken.mockImplementation(() => 'any_generated_token');
   const sut = new FacebookAuthenticationService(
     facebookApi,
     userAccountRepo,
@@ -147,7 +147,9 @@ describe('FacebookAuthenticationService', () => {
 
   it('should rethrow if an TokenGenerator throws', async () => {
     const { sut, crypto } = makeSut();
-    crypto.generateToken.mockRejectedValueOnce(new Error('token_error'));
+    crypto.generateToken.mockImplementationOnce(() => {
+      throw new Error('token_error');
+    });
     const promise = sut.perform({ token });
 
     await expect(promise).rejects.toThrow(new Error('token_error'));
