@@ -28,12 +28,25 @@ export class PgUserAccountRepository
     params: SaveFacebookAccountRepository.Params,
   ): Promise<SaveFacebookAccountRepository.Result> {
     const pgUserRepo = getRepository(PgUser);
-    const pgUser = await pgUserRepo.save({
-      email: params.email,
-      name: params.name,
-      facebookId: params.facebookId,
-    });
 
-    return { id: pgUser?.id?.toString() };
+    if (!params.id) {
+      await pgUserRepo.save({
+        email: params.email,
+        name: params.name,
+        facebookId: params.facebookId,
+      });
+    } else {
+      await pgUserRepo.update(
+        {
+          id: +params.id,
+        },
+        {
+          name: params.name,
+          facebookId: params.facebookId,
+        },
+      );
+    }
+
+    return { id: '1' };
   }
 }
