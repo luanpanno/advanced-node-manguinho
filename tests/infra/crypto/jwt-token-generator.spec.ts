@@ -16,10 +16,10 @@ const makeSut = () => {
 };
 
 describe('JwtTokenGenerator', () => {
-  it('should call sign with correct params', () => {
+  it('should call sign with correct params', async () => {
     const { sut, fakeJwt } = makeSut();
 
-    sut.generateToken({ key: 'any_key', expirationInMs: 1000 });
+    await sut.generateToken({ key: 'any_key', expirationInMs: 1000 });
 
     expect(fakeJwt.sign).toHaveBeenCalledWith(
       {
@@ -33,9 +33,9 @@ describe('JwtTokenGenerator', () => {
     expect(fakeJwt.sign).toHaveBeenCalledTimes(1);
   });
 
-  it('should return a token', () => {
+  it('should return a token', async () => {
     const { sut } = makeSut();
-    const token = sut.generateToken({
+    const token = await sut.generateToken({
       key: 'any_key',
       expirationInMs: 1000,
     });
