@@ -26,6 +26,7 @@
         "newlinesBetween": "always",
         "groups": [
           "module",
+          "/^@/application/",
           "/^@/data/",
           "/^@/domain/",
           "/^@/infra/",
