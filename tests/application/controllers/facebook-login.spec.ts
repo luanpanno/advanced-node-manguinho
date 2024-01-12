@@ -2,6 +2,7 @@ import { mock } from 'jest-mock-extended';
 
 import { AuthenticationError } from '@/domain/errors';
 import { FacebookAuthentication } from '@/domain/features';
+import { AccessToken } from '@/domain/models';
 
 type HttpResponse = {
   statusCode: number;
@@ -28,6 +29,15 @@ class FacebookLoginController {
       token: httpRequest.token,
     });
 
+    if (result instanceof AccessToken) {
+      return {
+        statusCode: 200,
+        data: {
+          accessToken: result.value,
+        },
+      };
+    }
+
     return {
       statusCode: 401,
       data: result,
@@ -37,6 +47,7 @@ class FacebookLoginController {
 
 const makeSut = () => {
   const facebookAuth = mock<FacebookAuthentication>();
+  facebookAuth.perform.mockResolvedValue(new AccessToken('any_value'));
   const sut = new FacebookLoginController(facebookAuth);
 
   return {
@@ -95,6 +106,19 @@ describe('FacebookLoginController', () => {
     expect(httpResponse).toEqual({
       statusCode: 401,
       data: new AuthenticationError(),
+    });
+  });
+
+  it('should return 200 if authentication succeeds', async () => {
+    const { sut } = makeSut();
+
+    const httpResponse = await sut.handle({ token: 'any_token' });
+
+    expect(httpResponse).toEqual({
+      statusCode: 200,
+      data: {
+        accessToken: 'any_value',
+      },
     });
   });
 });
