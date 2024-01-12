@@ -10,11 +10,20 @@ import {
 import { FacebookAuthentication } from '@/domain/features';
 import { AccessToken } from '@/domain/models';
 
+type HttpRequest = {
+  token: string | undefined | null;
+};
+
+type Model =
+  | Error
+  | {
+      accessToken: string;
+    };
+
 export class FacebookLoginController {
   constructor(private readonly facebookAuth: FacebookAuthentication) {}
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  async handle(httpRequest: any): Promise<HttpResponse> {
+  async handle(httpRequest: HttpRequest): Promise<HttpResponse<Model>> {
     try {
       if (
         httpRequest.token === '' ||
