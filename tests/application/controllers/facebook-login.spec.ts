@@ -1,15 +1,14 @@
 import { mock } from 'jest-mock-extended';
 
 import { FacebookLoginController } from '@/application/controllers/facebook-login';
-import {
-  RequiredFieldError,
-  ServerError,
-  UnauthorizedError,
-} from '@/application/errors/http';
+import { ServerError, UnauthorizedError } from '@/application/errors/http';
+import { RequiredStringValidator } from '@/application/validation/required-string';
 
 import { AuthenticationError } from '@/domain/errors';
 import { FacebookAuthentication } from '@/domain/features';
 import { AccessToken } from '@/domain/models';
+
+jest.mock('@/application/validation/required-string');
 
 const makeSut = () => {
   const facebookAuth = mock<FacebookAuthentication>();
@@ -23,33 +22,24 @@ const makeSut = () => {
 };
 
 describe('FacebookLoginController', () => {
-  it('should return 400 if token is empty', async () => {
+  it('should return 400 if validation fails', async () => {
     const { sut } = makeSut();
-    const httpResponse = await sut.handle({ token: '' });
+    const error = new Error('validation_error');
 
+    const RequiredStringValidatorSpy = jest.fn().mockImplementationOnce(() => ({
+      validate: jest.fn().mockReturnValueOnce(error),
+    }));
+
+    jest
+      .mocked(RequiredStringValidator)
+      .mockImplementationOnce(RequiredStringValidatorSpy);
+
+    const httpResponse = await sut.handle({ token: 'any_token' });
+
+    expect(RequiredStringValidator).toHaveBeenCalledWith('any_token', 'token');
     expect(httpResponse).toEqual({
       statusCode: 400,
-      data: new RequiredFieldError('token'),
-    });
-  });
-
-  it('should return 400 if token is null', async () => {
-    const { sut } = makeSut();
-    const httpResponse = await sut.handle({ token: null });
-
-    expect(httpResponse).toEqual({
-      statusCode: 400,
-      data: new RequiredFieldError('token'),
-    });
-  });
-
-  it('should return 400 if token is undefined', async () => {
-    const { sut } = makeSut();
-    const httpResponse = await sut.handle({ token: undefined });
-
-    expect(httpResponse).toEqual({
-      statusCode: 400,
-      data: new RequiredFieldError('token'),
+      data: error,
     });
   });
 
