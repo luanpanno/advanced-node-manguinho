@@ -20,13 +20,14 @@
   "scripts": {
     "start": "node dist/main/api",
     "build": "rimraf dist && tsc -p tsconfig-build.json",
+    "lint": "eslint .",
+    "lint:fix": "npm run lint -- --fix",
+    "prepare": "husky install",
     "test": "jest --passWithNoTests --no-cache --runInBand",
     "test:watch": "npm run test -- --watch",
     "test:coverage": "npm run test -- --coverage",
     "test:staged": "npm run test -- --findRelatedTests",
-    "lint": "eslint .",
-    "lint:fix": "npm run lint -- --fix",
-    "prepare": "husky install"
+    "test:fb-api": "npm run test -- -c ./jest.integration.config.js tests/external/facebook-api.test.ts"
   },
   "dependencies": {
     "axios": "^1.6.5",
