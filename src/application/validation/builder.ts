@@ -1,14 +1,16 @@
 import { RequiredStringValidator } from './required-string';
 import { Validator } from './validator';
 
+type Value = string | undefined | null;
+
 export class ValidationBuilder {
   private constructor(
-    private readonly value: string,
+    private readonly value: Value,
     private readonly fieldName: string,
     private readonly validators: Validator[] = [],
   ) {}
 
-  static of(params: { value: string; fieldName: string }): ValidationBuilder {
+  static of(params: { value: Value; fieldName: string }): ValidationBuilder {
     return new ValidationBuilder(params.value, params.fieldName);
   }
 
