@@ -13,12 +13,23 @@ class ExpressRouter {
   }
 }
 
+const makeSut = () => {
+  const req = getMockReq({ body: { any: 'any' } });
+  const { res } = getMockRes();
+  const controller = mock<Controller>();
+  const sut = new ExpressRouter(controller);
+
+  return {
+    req,
+    res,
+    controller,
+    sut,
+  };
+};
+
 describe('ExpressRouter', () => {
   it('should call handle with correct request', async () => {
-    const req = getMockReq({ body: { any: 'any' } });
-    const { res } = getMockRes();
-    const controller = mock<Controller>();
-    const sut = new ExpressRouter(controller);
+    const { sut, req, res, controller } = makeSut();
 
     await sut.adapt(req, res);
 
@@ -26,10 +37,8 @@ describe('ExpressRouter', () => {
   });
 
   it('should call handle with empty request', async () => {
+    const { sut, res, controller } = makeSut();
     const req = getMockReq({ body: undefined });
-    const { res } = getMockRes();
-    const controller = mock<Controller>();
-    const sut = new ExpressRouter(controller);
 
     await sut.adapt(req, res);
 
