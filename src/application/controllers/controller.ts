@@ -7,15 +7,17 @@ import {
 import { ValidationComposite } from '../validation/composite';
 import { Validator } from '../validation/validator';
 
+type HttpRequest = unknown;
+
 export abstract class Controller {
-  abstract perform(httpRequest: unknown): Promise<HttpResponse>;
+  abstract perform(httpRequest: HttpRequest): Promise<HttpResponse>;
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  buildValidators(httpRequest: unknown): Validator[] {
+  buildValidators(httpRequest: HttpRequest): Validator[] {
     return [];
   }
 
-  async handle(httpRequest: unknown): Promise<HttpResponse> {
+  async handle(httpRequest: HttpRequest): Promise<HttpResponse> {
     try {
       const error = this.validate(httpRequest);
 
@@ -29,7 +31,7 @@ export abstract class Controller {
     }
   }
 
-  private validate(httpRequest: unknown): Error | undefined {
+  private validate(httpRequest: HttpRequest): Error | undefined {
     const validators = this.buildValidators(httpRequest);
     const validator = new ValidationComposite(validators);
 
