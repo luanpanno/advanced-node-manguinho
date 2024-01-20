@@ -7,13 +7,10 @@ export const adaptExpressRoute =
   (controller: Controller): RequestHandler =>
   async (req, res) => {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const httpResponse: HttpResponse<any> = await controller.handle(req.body);
+    const { statusCode, data }: HttpResponse<any> = await controller.handle(
+      req.body,
+    );
+    const json = statusCode === 200 ? data : { error: data.message };
 
-    if (httpResponse.statusCode === 200) {
-      res.status(200).json(httpResponse.data);
-    } else {
-      res
-        .status(httpResponse.statusCode)
-        .json({ error: httpResponse.data.message });
-    }
+    res.status(statusCode).json(json);
   };

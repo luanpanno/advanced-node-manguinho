@@ -27,11 +27,11 @@ export class FacebookApi {
     private readonly clientSecret: string,
   ) {}
 
-  async loadUser(
-    params: LoadFacebookUserApi.Params,
-  ): Promise<LoadFacebookUserApi.Result> {
+  async loadUser({
+    token,
+  }: LoadFacebookUserApi.Params): Promise<LoadFacebookUserApi.Result> {
     try {
-      const fbUser = await this.getUserInfo(params.token);
+      const fbUser = await this.getUserInfo(token);
 
       return {
         facebookId: fbUser.id,

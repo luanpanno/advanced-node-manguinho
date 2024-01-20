@@ -12,10 +12,10 @@ export class PgUserAccountRepository
 {
   private readonly pgUserRepo = getRepository(PgUser);
 
-  async load(
-    params: LoadUserAccountRepository.Params,
-  ): Promise<LoadUserAccountRepository.Result> {
-    const pgUser = await this.pgUserRepo.findOne({ email: params.email });
+  async load({
+    email,
+  }: LoadUserAccountRepository.Params): Promise<LoadUserAccountRepository.Result> {
+    const pgUser = await this.pgUserRepo.findOne({ email });
 
     if (!pgUser?.id) return undefined;
 
@@ -25,36 +25,47 @@ export class PgUserAccountRepository
     };
   }
 
-  async saveWithFacebook(
-    params: SaveFacebookAccountRepository.Params,
-  ): Promise<SaveFacebookAccountRepository.Result> {
-    if (!params.id) {
-      const account = await this.saveUser(params);
+  async saveWithFacebook({
+    id,
+    name,
+    email,
+    facebookId,
+  }: SaveFacebookAccountRepository.Params): Promise<SaveFacebookAccountRepository.Result> {
+    if (!id) {
+      const account = await this.saveUser({ email, name, facebookId });
 
       return { id: account.id.toString() };
     }
 
-    await this.updateUser(params);
+    await this.updateUser({ email, facebookId, name, id });
 
-    return { id: params.id };
+    return { id };
   }
 
-  private async saveUser(params: SaveFacebookAccountRepository.Params) {
+  private async saveUser({
+    email,
+    name,
+    facebookId,
+  }: SaveFacebookAccountRepository.Params) {
     return this.pgUserRepo.save({
-      email: params.email,
-      name: params.name,
-      facebookId: params.facebookId,
+      email,
+      name,
+      facebookId,
     });
   }
 
-  private async updateUser(params: SaveFacebookAccountRepository.Params) {
+  private async updateUser({
+    id,
+    name,
+    facebookId,
+  }: SaveFacebookAccountRepository.Params) {
     return this.pgUserRepo.update(
       {
-        id: +params.id!,
+        id: +id!,
       },
       {
-        name: params.name,
-        facebookId: params.facebookId,
+        name: name,
+        facebookId: facebookId,
       },
     );
   }
