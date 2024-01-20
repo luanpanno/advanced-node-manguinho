@@ -10,12 +10,11 @@ import { PgUser } from '../entities';
 export class PgUserAccountRepository
   implements LoadUserAccountRepository, SaveFacebookAccountRepository
 {
-  private readonly pgUserRepo = getRepository(PgUser);
-
   async load({
     email,
   }: LoadUserAccountRepository.Params): Promise<LoadUserAccountRepository.Result> {
-    const pgUser = await this.pgUserRepo.findOne({ email });
+    const pgUserRepo = getRepository(PgUser);
+    const pgUser = await pgUserRepo.findOne({ email });
 
     if (!pgUser?.id) return undefined;
 
@@ -47,7 +46,9 @@ export class PgUserAccountRepository
     name,
     facebookId,
   }: SaveFacebookAccountRepository.Params) {
-    return this.pgUserRepo.save({
+    const pgUserRepo = getRepository(PgUser);
+
+    return pgUserRepo.save({
       email,
       name,
       facebookId,
@@ -59,7 +60,9 @@ export class PgUserAccountRepository
     name,
     facebookId,
   }: SaveFacebookAccountRepository.Params) {
-    return this.pgUserRepo.update(
+    const pgUserRepo = getRepository(PgUser);
+
+    return pgUserRepo.update(
       {
         id: +id!,
       },
