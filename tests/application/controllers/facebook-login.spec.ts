@@ -4,9 +4,9 @@ import { FacebookLoginController } from '@/application/controllers/facebook-logi
 import { UnauthorizedError } from '@/application/errors/http';
 import { RequiredStringValidator } from '@/application/validation/required-string';
 
-import { AuthenticationError } from '@/domain/errors';
+import { AccessToken } from '@/domain/entities';
+import { AuthenticationError } from '@/domain/entities/errors';
 import { FacebookAuthentication } from '@/domain/features';
-import { AccessToken } from '@/domain/models';
 
 const makeSut = () => {
   const facebookAuth = mock<FacebookAuthentication>();

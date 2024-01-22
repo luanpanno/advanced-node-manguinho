@@ -3,13 +3,13 @@ import { mock, MockProxy } from 'jest-mock-extended';
 import { FacebookApi } from '@/domain/contracts/apis';
 import { TokenGenerator } from '@/domain/contracts/crypto/token';
 import { UserAccountRepository } from '@/domain/contracts/repos';
-import { AuthenticationError } from '@/domain/errors';
-import { AccessToken } from '@/domain/models';
-import { FacebookAccount } from '@/domain/models/facebook-account';
-import { FacebookAuthenticationService } from '@/domain/services';
+import { AccessToken } from '@/domain/entities';
+import { AuthenticationError } from '@/domain/entities/errors';
+import { FacebookAccount } from '@/domain/entities/facebook-account';
+import { FacebookAuthenticationUseCase } from '@/domain/use-cases';
 
 type Sut = {
-  sut: FacebookAuthenticationService;
+  sut: FacebookAuthenticationUseCase;
   facebookApi: MockProxy<FacebookApi>;
   crypto: MockProxy<TokenGenerator>;
   userAccountRepo: MockProxy<UserAccountRepository>;
@@ -29,7 +29,7 @@ const makeSut = (): Sut => {
   });
   const crypto = mock<TokenGenerator>();
   crypto.generateToken.mockResolvedValue('any_generated_token');
-  const sut = new FacebookAuthenticationService(
+  const sut = new FacebookAuthenticationUseCase(
     facebookApi,
     userAccountRepo,
     crypto,
@@ -43,9 +43,9 @@ const makeSut = (): Sut => {
   };
 };
 
-jest.mock('@/domain/models/facebook-account');
+jest.mock('@/domain/entities/facebook-account');
 
-describe('FacebookAuthenticationService', () => {
+describe('FacebookAuthenticationUseCase', () => {
   const token = 'any_token';
   const fbData = {
     name: 'any_fb_name',
