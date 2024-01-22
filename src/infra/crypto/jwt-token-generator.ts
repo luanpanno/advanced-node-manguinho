@@ -1,6 +1,6 @@
 import { sign } from 'jsonwebtoken';
 
-import { TokenGenerator } from '@/data/contracts/crypto/token';
+import { TokenGenerator } from '@/domain/contracts/crypto/token';
 
 export class JwtTokenGenerator implements TokenGenerator {
   constructor(private readonly secret: string) {}

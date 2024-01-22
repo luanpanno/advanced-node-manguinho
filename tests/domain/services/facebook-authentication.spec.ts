@@ -1,13 +1,12 @@
 import { mock, MockProxy } from 'jest-mock-extended';
 
-import { FacebookApi } from '@/data/contracts/apis';
-import { TokenGenerator } from '@/data/contracts/crypto/token';
-import { UserAccountRepository } from '@/data/contracts/repos';
-import { FacebookAuthenticationService } from '@/data/services';
-
+import { FacebookApi } from '@/domain/contracts/apis';
+import { TokenGenerator } from '@/domain/contracts/crypto/token';
+import { UserAccountRepository } from '@/domain/contracts/repos';
 import { AuthenticationError } from '@/domain/errors';
 import { AccessToken } from '@/domain/models';
 import { FacebookAccount } from '@/domain/models/facebook-account';
+import { FacebookAuthenticationService } from '@/domain/services';
 
 type Sut = {
   sut: FacebookAuthenticationService;

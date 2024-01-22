@@ -1,6 +1,5 @@
-import { FacebookApi } from '@/data/contracts/apis';
-import { UserAccountRepository } from '@/data/contracts/repos';
-
+import { FacebookApi } from '@/domain/contracts/apis';
+import { UserAccountRepository } from '@/domain/contracts/repos';
 import { AuthenticationError } from '@/domain/errors';
 import { FacebookAuthentication } from '@/domain/features';
 import { AccessToken } from '@/domain/models';

@@ -27,7 +27,6 @@
         "groups": [
           "module",
           "/^@/application/",
-          "/^@/data/",
           "/^@/domain/",
           "/^@/infra/",
           "/^@/main/",
