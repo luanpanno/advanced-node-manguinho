@@ -8,7 +8,7 @@ import { TokenGenerator } from '../contracts/crypto/token';
 
 export type FacebookAuthentication = (params: {
   token: string;
-}) => Promise<AccessToken | AuthenticationError>;
+}) => Promise<{ accessToken: string }>;
 
 type Setup = (
   facebookApi: FacebookApi,
@@ -21,7 +21,7 @@ export const setupFacebookAuthentication: Setup =
     const fbData = await facebookApi.loadUser(params);
 
     if (!fbData) {
-      return new AuthenticationError();
+      throw new AuthenticationError();
     }
 
     const accountData = await userAccountRepo.load({
@@ -29,10 +29,10 @@ export const setupFacebookAuthentication: Setup =
     });
     const fbAccount = new FacebookAccount(fbData, accountData);
     const { id } = await userAccountRepo.saveWithFacebook(fbAccount);
-    const token = await crypto.generateToken({
+    const accessToken = await crypto.generateToken({
       key: id,
       expirationInMs: AccessToken.expirationInMs,
     });
 
-    return new AccessToken(token);
+    return { accessToken };
   };

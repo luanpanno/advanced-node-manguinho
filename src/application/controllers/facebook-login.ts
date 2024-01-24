@@ -1,6 +1,5 @@
 import { HttpResponse, ok, unauthorized } from '@/application/helpers/http';
 
-import { AccessToken } from '@/domain/entities';
 import { FacebookAuthentication } from '@/domain/use-cases';
 
 import { ValidationBuilder } from '../validation/builder';
@@ -23,15 +22,15 @@ export class FacebookLoginController extends Controller {
   }
 
   async perform({ token }: HttpRequest): Promise<HttpResponse<Model>> {
-    const accessToken = await this.facebookAuthentication({
-      token: token!,
-    });
+    try {
+      const accessToken = await this.facebookAuthentication({
+        token: token!,
+      });
 
-    if (accessToken instanceof AccessToken) {
-      return ok({ accessToken: accessToken.value });
+      return ok(accessToken);
+    } catch {
+      return unauthorized();
     }
-
-    return unauthorized();
   }
 
   override buildValidators({ token }: HttpRequest): Validator[] {

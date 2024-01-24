@@ -3,7 +3,7 @@ import { mock } from 'jest-mock-extended';
 
 import { Controller } from '@/application/controllers/controller';
 
-import { adaptExpressRoute } from '@/infra/http/express-router';
+import { adaptExpressRoute } from '@/main/adapters/express-router';
 
 const makeSut = () => {
   const req = getMockReq({ body: { any: 'any' } });

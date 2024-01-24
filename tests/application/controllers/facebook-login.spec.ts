@@ -2,12 +2,11 @@ import { FacebookLoginController } from '@/application/controllers/facebook-logi
 import { UnauthorizedError } from '@/application/errors/http';
 import { RequiredStringValidator } from '@/application/validation/required-string';
 
-import { AccessToken } from '@/domain/entities';
 import { AuthenticationError } from '@/domain/entities/errors';
 
 const makeSut = () => {
   const facebookAuth = jest.fn();
-  facebookAuth.mockResolvedValue(new AccessToken('any_value'));
+  facebookAuth.mockResolvedValue({ accessToken: 'any_value' });
   const sut = new FacebookLoginController(facebookAuth);
 
   return {
@@ -38,7 +37,7 @@ describe('FacebookLoginController', () => {
   it('should return 401 if authentication fails', async () => {
     const { sut, facebookAuth } = makeSut();
 
-    facebookAuth.mockResolvedValueOnce(new AuthenticationError());
+    facebookAuth.mockRejectedValueOnce(new AuthenticationError());
 
     const httpResponse = await sut.handle({ token: 'any_token' });
 
