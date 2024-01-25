@@ -6,11 +6,22 @@ import { HttpResponse } from '@/application/helpers/http';
 
 type Adapter = (middleware: Middleware) => RequestHandler;
 
-const adaptExpressMiddleware: Adapter = (middleware) => async (req, res) => {
-  const { statusCode, data } = await middleware.handle(req.headers);
+const adaptExpressMiddleware: Adapter =
+  (middleware) => async (req, res, next) => {
+    const { statusCode, data } = await middleware.handle(req.headers);
 
-  res.status(statusCode).json(data);
-};
+    if (statusCode === 200) {
+      const entries = Object.entries(data as object).filter(
+        (entry) => !!entry[1],
+      );
+
+      req.locals = { ...req.locals, ...Object.fromEntries(entries) };
+
+      next();
+    } else {
+      res.status(statusCode).json(data);
+    }
+  };
 
 interface Middleware {
   handle: (httpRequest: unknown) => Promise<HttpResponse>;
@@ -29,8 +40,13 @@ describe('ExpressMiddleware', () => {
     next = getMockRes().next;
     middleware = mock<Middleware>();
     middleware.handle.mockResolvedValue({
-      statusCode: 500,
-      data: { error: 'any_error' },
+      statusCode: 200,
+      data: {
+        emptyProp: '',
+        nullProp: null,
+        undefinedProp: undefined,
+        data: 'any_data',
+      },
     });
   });
 
@@ -55,11 +71,23 @@ describe('ExpressMiddleware', () => {
   });
 
   it('should respond with correct error and statusCode', async () => {
+    middleware.handle.mockResolvedValueOnce({
+      statusCode: 500,
+      data: { error: 'any_error' },
+    });
+
     await sut(req, res, next);
 
     expect(res.status).toHaveBeenCalledWith(500);
     expect(res.status).toHaveBeenCalledTimes(1);
     expect(res.json).toHaveBeenCalledWith({ error: 'any_error' });
     expect(res.json).toHaveBeenCalledTimes(1);
+  });
+
+  it('should add valid data to req.locals', async () => {
+    await sut(req, res, next);
+
+    expect(req.locals).toEqual({ data: 'any_data' });
+    expect(next).toHaveBeenCalledTimes(1);
   });
 });
