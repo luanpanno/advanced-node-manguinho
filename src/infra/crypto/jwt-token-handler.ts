@@ -1,6 +1,9 @@
-import { sign } from 'jsonwebtoken';
+import { sign, verify } from 'jsonwebtoken';
 
-import { TokenGenerator } from '@/domain/contracts/crypto/token';
+import {
+  TokenGenerator,
+  TokenValidator,
+} from '@/domain/contracts/crypto/token';
 
 export class JwtTokenHandler implements TokenGenerator {
   constructor(private readonly secret: string) {}
@@ -15,5 +18,9 @@ export class JwtTokenHandler implements TokenGenerator {
     });
 
     return token;
+  }
+
+  async validateToken({ token }: TokenValidator.Params): Promise<void> {
+    verify(token, this.secret);
   }
 }
